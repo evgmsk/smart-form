@@ -1,0 +1,85 @@
+@import "../mixin";
+
+.smart-input {
+  @include smart-input();
+  .smart-input__input {
+    @include smart-input-input();
+  }
+  .input-error-msg {
+    @include error-msg();
+  }
+  &:not(.like-placeholder) {
+    &.outlined {
+      .smart-input__input {
+        @include input-border-style('outlined');
+      }
+    }
+    &.shadowed {
+      .smart-input__input {
+        @include input-border-style('shadowed');
+      }
+      .smart-input__label {
+        text-shadow: 1px 1px $text-shadow-color;
+      }
+    }
+  }
+  &.in-col {
+    flex-direction: column-reverse;
+    .smart-input__label {
+      @include smart-input-label('in-col');
+    }
+  }
+  &.in-row:not(.check-input) {
+    justify-content: space-between;
+    align-items: center;
+    .smart-input__error-wrapper {
+      width: 100%;
+    }
+    .input-error-msg {
+      left: .5rem;
+      bottom: -1.3rem;
+    }
+    .smart-input__label {
+      @include smart-input-label('in-row', 1.6rem, 50%);
+    }
+  }
+  &.like-placeholder.underlined {
+    .smart-input__input {
+      @include like-placeholder-input('underlined');
+      &.invalid-input {
+        @include error('underlined');
+      }
+    }
+    .smart-input__label {
+      @include like-placeholder-label(.5rem);
+    }
+  }
+  &.like-placeholder.outlined {
+    .smart-input__input {
+      @include like-placeholder-input('outlined');
+      &.invalid-input {
+        @include error('outlined');
+      }
+    }
+    .smart-input__label {
+      @include like-placeholder-label();
+    }
+  }
+  &.like-placeholder.shadowed {
+    .smart-input__input {
+      @include like-placeholder-input('shadowed');
+      &.invalid-input {
+        @include error('shadowed');
+      }
+    }
+    .smart-input__label {
+      @include like-placeholder-label();
+    }
+  }
+  &.reset-input {
+   @include reset-input()
+  }
+  &.check-input{
+    @include check-input();
+  }
+}

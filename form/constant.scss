@@ -1,0 +1,52 @@
+$error-color: red !default;
+$focus-color: #19a0e6 !default;
+$hover-color: #6c757d !default;
+$text-color: #222222 !default;
+$shadow-color: darkgrey !default;
+$input-colors: $shadow-color $hover-color $focus-color $error-color;
+$placeholder-color: gray !default;
+$text-shadow-color: lightgray !default;
+$primary-color: #007bff !default;
+$success-color: #11aa11 !default;
+$danger-color: #dc3545 !default;
+$secondary-color: #6c757d !default;
+$warning-color: #e6b827 !default;
+$disable-filter: rgba(150, 150, 150, .7) !default;
+$info-color: #17a2b8 !default;
+$btn-light-color: #d8d9da !default;
+$btn-dark-color: #343a40 !default;
+$gradient-color: rgba(255, 255, 255, 1) !default;
+
+$transition: all ease-in .3s;
+
+$inputs-map: (
+    shadowed: 'shadowed',
+    outlined: 'outlined',
+    underlined: 'underlined',
+    check-input: 'check-input',
+    reset: 'reset'
+);
+$labels-map: (
+    in-rol: 'in-rol',
+    in-col: 'in-col',
+    like-placeholder: 'like-placeholder'
+);
+
+$btn-middle-height: 2.6rem !default;
+$font-btn: 600 1.4rem Roboto, Helvetica, sans-serif;
+$btn-padding: .5rem 1rem;
+$button-classes-map: (
+    btn-primary: $primary-color,
+    btn-secondary: $secondary-color,
+    btn-success: $success-color,
+    btn-warning: $warning-color,
+    btn-info: $info-color,
+    btn-danger: $danger-color,
+    btn-light: $btn-light-color,
+    btn-dark: $btn-dark-color,
+);
+
+$height-input: 3.8rem  !default;
+$translate: .6rem;
+$input-padding-left: 1rem  !default;
+$input-padding-top: 1rem  !default;

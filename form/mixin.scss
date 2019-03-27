@@ -1,0 +1,321 @@
+@import "constant";
+
+@mixin smart-form($direction: column, $justify: flex-start, $width: 80%, $max-width: 800px, $margin: auto) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  width: $width;
+  max-width: $max-width;
+  margin: $margin;
+}
+
+@mixin smart-input(
+    $direction: row-reverse,
+    $justify: space-between,
+    $align: center,
+    $background: white,
+    $margin: .9rem .5rem,
+    $padding: 1.3rem .5rem,
+    $border-rad: 5px,
+    $transition: $transition) {
+  position: relative;
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+  margin: $margin;
+  padding: $padding;
+  background: $background;
+  border-radius: $border-rad;
+  overflow: hidden;
+  .smart-input__error-wrapper {
+    position: relative;
+  }
+  .smart-input__label {
+    transition: $transition;
+  }
+  &.like-placeholder {
+    .smart-input__label {
+      background: $background;
+      z-index: 9;
+    }
+  }
+  .smart-input__input {
+    transition: $transition;
+    z-index: 10;
+    outline: none;
+    box-sizing: border-box;
+    border: none;
+  }
+  &:not(.shadowed) {
+    .smart-input__input {
+      &:-webkit-autofill {
+        transition: background 0s 100000000s;
+      }
+    }
+  }
+}
+
+@mixin smart-input-input(
+    $width: 100%,
+    $height: $height-input,
+    $font-size: 1rem,
+    $color: $text-color,
+    $padding: $input-padding-top $input-padding-left,
+    $border-rad: 5px,
+    $background: transparent) {
+  width: $width;
+  height: $height;
+  font-size: $font-size;
+  color: $color;
+  border-radius: $border-rad;
+  padding: $padding;
+}
+
+@mixin smart-input-label($label-style: 'in-row', $font-size: 1.6rem, $width: 100%, $margin: 0 0 1rem 0) {
+  font-size: $font-size;
+  width: $width;
+  @if($label-style == 'in-row') {
+    margin: nth($margin, 1) nth($margin, 2)
+  }
+  @else {
+    margin: $margin;
+  }
+}
+
+@mixin box-shadow($color, $size: 0 1px 1px 1px, $inset: false) {
+  $box-shadow: $size $color !default;
+  @if($inset == inset) {
+    $box-shadow: $size $color inset !global;
+  }
+  box-shadow: $box-shadow;
+  &:-webkit-autofill {
+    transition: background 0s 100000000000s;
+  }
+}
+
+@mixin box-border($color, $input-style, $width: 2px) {
+  @if($input-style == 'outlined') {
+    border: solid $width $color;
+  }
+  @else {
+    border-top: solid $width transparent;
+    border-bottom: solid $width $color;
+  }
+}
+
+@mixin error($input-style: 'outlined', $color: $error-color) {
+  @if($input-style == 'shadowed') {
+    &.error,
+    &.error:hover,
+    &.error:focus {
+      border: none;
+      @include box-shadow($input-style, $color, 2px);
+    }
+  }
+  @else {
+    &.error,
+    &.error:hover,
+    &.error:focus {
+      @include box-border($input-style, $color, 2px);
+    }
+  }
+}
+
+@mixin input-border-style($input-style, $colors: $input-colors, $padding: $input-padding-top $input-padding-left) {
+  @if($input-style == 'underlined'){
+    @include box-border(nth($colors, 1), $input-style, 1px);
+    &:hover {
+      @include box-border(nth($colors, 2), $input-style);
+    }
+    &:focus {
+      @include box-border(nth($colors, 3), $input-style);
+    }
+  }
+  @else if($input-style == 'outlined') {
+    @include box-border(nth($colors, 1), $input-style, 1px);
+    &:hover {
+      @include box-border(nth($colors, 2), $input-style);
+      padding: nth($padding, 1) calc(#{nth($padding, 1)} - 1px);
+    }
+    &:focus {
+      @include box-border(nth($colors, 3), $input-style);
+      padding: nth($padding, 1) calc(#{nth($padding, 1)} - 1px);
+    }
+    &.invalid-input {
+      @include box-border(nth($colors, 4), $input-style);
+      padding: nth($padding, 1) calc(#{nth($padding, 1)} - 1px);
+    }
+  }
+  @else if($input-style == 'shadowed') {
+    border: none;
+    @include box-shadow(nth($colors, 1), 0 0 1px 1px);
+    &:hover {
+      border: none;
+      @include box-shadow(nth($colors, 2));
+    }
+    &:focus {
+      border: none;
+      @include box-shadow(nth($colors, 3));
+    }
+    &.invalid-input {
+      border: none;
+      @include box-shadow(nth($colors, 4));
+    }
+  }
+}
+
+@mixin dirty-label($translate, $font-size) {
+  font-size: $font-size;
+  transform: translateY(-$translate);
+}
+
+@mixin error-msg($color: $error-color, $left: 1rem, $bottom: 0, $font-size: .9rem) {
+  position: absolute;
+  left: $left;
+  bottom: $bottom;
+  // color: $color;
+  font-size: $font-size;
+}
+
+@mixin like-placeholder-label(
+    $input-style: 'outlined',
+    $left: 1.2rem,
+    $font-size: 1.3rem,
+    $resize: .3rem,
+    $translate: .6rem,
+    $input-height: $height-input,
+    $colors: $placeholder-color $focus-color $error-color,
+    $background: inherit,
+    $padding: 0 3px) {
+  $label: $input-height * .5 + $translate !default;
+  @if($input-style == 'shadowed') {
+    $label: calc(#{$label} + .2rem) !global;
+  }
+  background: $background;
+  position: absolute;
+  left: $left;
+  top: 50%;
+  transform: translateY(-50%);
+  color: nth($colors, 1);
+  padding: $padding;
+  font-size: $font-size;
+  border-radius: 3px;
+  z-index: 9;
+  &.invalid-input {
+    color: nth($colors, 3);
+  }
+  &.dirty-input {
+    font-size: $font-size - $resize;
+    transform: translateY(-$label);
+    z-index: 11;
+  }
+}
+
+@mixin like-placeholder-input(
+      $input-style: 'underlined',
+      $label-font-size: 1rem,
+      $translate: .5rem,
+      $colors: $input-colors,
+      $height: $height-input,
+      $border-rad: 5px,
+      $width: 100%,
+      $padding: $input-padding-top $input-padding-left,
+      $background: transparent) {
+  $label: $height * .5 + $translate;
+  background: $background;
+  position: relative;
+  height: $height;
+  width: $width;
+  &::placeholder {
+    opacity: 0;
+    z-index: 100;
+  }
+  &:focus {
+    & + .smart-input__label {
+      z-index: 11;
+      font-size: $label-font-size;
+      color: nth($colors, 3);
+      transform: translateY(-#{$label});
+    }
+    & + .smart-input__label.invalid-input {
+      color: nth($colors, 4);
+    }
+    &::placeholder {
+      opacity: 1;
+    }
+  }
+  @include input-border-style($input-style, $colors, $padding);
+  @if($input-style == 'underlined') {
+    border-radius: $border-rad $border-rad 0 0;
+  }
+  @else {
+    border-radius: $border-rad;
+  }
+  @include error(nth($colors, 4), $input-style)
+}
+
+@mixin set-button ($color, $outlined: false, $background: white, $border-width: 1px, $darken: 20%){
+  @if ($outlined == true) {
+    border: $border-width solid $color;
+    background: white;
+    color: $color;
+    box-shadow: 0 0 1px 1px darken($color, $darken);
+    &:hover:not([disabled]) {
+      box-shadow: 1px 1px 1px 1px darken($color, $darken);
+    }
+    &:active:not([disabled]) {
+      box-shadow: inset 1px 1px 1px 1px darken($color, $darken);
+    }
+    &[disabled] {
+      @extend %disable;
+    }
+  }
+  @else {
+    background-color: $color;
+    background-size: 75% 100%;
+    background-position: 50% 0;
+    color: white;
+    &:hover:not([disabled]) {
+      background-image: none;
+      background-color: darken($color, 10%)
+    }
+    &:active:not([disabled]) {
+      background-image: linear-gradient(to left, darken($color, 15%), darken($color, 15%), darken($color, 15%), $color, $color, darken($color, 15%), darken($color, 15%), darken($color, 15%));
+      background-size: 900% 100%;
+      background-position: 50% 0;
+      transition: background ease-out .4s;
+    }
+    &[disabled] {
+      @extend %disable;
+    }
+  }
+}
+
+@mixin reset-input($margin: 0, $padding: 0, $width: auto, $height: inherit, $justify: flex-start, $align: flex-start) {
+  display: block;
+  justify-content: $justify;
+  padding: $padding;
+  width: $width;
+  height: $height;
+  margin: $margin;
+  align-self: $align;
+}
+
+@mixin check-input-label() {
+
+}
+
+@mixin check-input($field-width: 100px, $field-margin: inherit,  $field-padding: 1.3rem .5rem, $justify: flex-end, $font-size: 1.2rem, $input-height: auto, $input-margin: .5rem) {
+  margin: $field-margin;
+  width: $field-width;
+  justify-content: $justify;
+  padding: $field-padding;
+  .smart-input__label,
+  .smart-input__input {
+    font-size: $font-size;
+    height: $input-height;
+    margin: $input-margin;
+  }
+}
+
